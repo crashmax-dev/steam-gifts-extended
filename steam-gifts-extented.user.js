@@ -92,6 +92,15 @@
                 });
                 return xsrf[0].defaultValue;
             },
+            navPoints: function (value) {
+                var points = main.find(document.getElementsByTagName("span"), {
+                    className: "nav__points"
+                });
+                if (value) {
+                    points[0].innerHTML = value;
+                }
+                return points[0].textContent;
+            },
             entryButtons: function () {
                 var xsrf = main.xsrf();
                 var links = main.find(document.links, {
@@ -127,6 +136,7 @@
                 }
             },
             start: function () {
+                main.navPoints();
                 main.entryButtons();
             }
         };
