@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name            SteamGiftsExtented
-// @namespace       https://github.com/crashmax-off/SteamGiftsExtented
-// @description     Description
-// @author          Vitalij Ryndin
-// @icon            https://cdn.steamgifts.com/img/favicon.ico
-// @include         https://www.steamgifts.com/*
-// @match           https://www.steamgifts.com/*
-// @version         1.0.0
+// @name           SteamGiftsExtented
+// @namespace      https://github.com/crashmax-off/SteamGiftsExtented
+// @description    Description
+// @author         Vitalij Ryndin
+// @icon           https://cdn.steamgifts.com/img/favicon.ico
+// @include        https://www.steamgifts.com/*
+// @match          https://www.steamgifts.com/*
+// @version        1.0.0
 // ==/UserScript==
 
 (function () {
