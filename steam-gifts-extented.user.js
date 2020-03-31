@@ -92,6 +92,13 @@
                 });
                 return xsrf[0].defaultValue;
             },
+            fixHeader: function () {
+                var style = main.ce("style", {
+                    type: "text/css",
+                    html: "header{position:fixed;width:-webkit-fill-available;z-index:1;margin-top:-29px}body{margin-top:29px}"
+                });
+                document.getElementsByTagName('head')[0].appendChild(style);
+            },
             navPoints: function (value) {
                 var points = main.find(document.getElementsByTagName("span"), {
                     className: "nav__points"
@@ -136,6 +143,7 @@
                 }
             },
             start: function () {
+                main.fixHeader();
                 main.navPoints();
                 main.entryButtons();
             }
