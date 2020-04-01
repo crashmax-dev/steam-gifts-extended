@@ -99,7 +99,7 @@
                 });
                 document.getElementsByTagName('head')[0].appendChild(style);
             },
-            navPoints: function (value) {
+            getBalance: function (value) {
                 var points = main.find(document.getElementsByTagName("span"), {
                     className: "nav__points"
                 });
@@ -110,6 +110,8 @@
             },
             entryButtons: function () {
                 var xsrf = main.xsrf();
+                var Status = main.giveawayStatus();
+                var Prices = main.getPrices();
                 var links = main.find(document.links, {
                     className: "giveaway__heading__name"
                 });
@@ -127,14 +129,33 @@
                         var button = main.ce("div", {
                             style: "cursor: pointer",
                             id: linksArray[i],
-                            html: '<i class="fa fa-plus-circle"></i> <span>Entry Giveaway</span>',
+                            class: Status[i],
+                            html: (Status[i] == "entry_delete" ? '<i class="fa fa-minus-circle"></i> <span>Remove Entry</span>' : '<i class="fa fa-plus-circle"></i> <span>Entry Giveaway</span>'),
                             onclick: function (e) {
+
+                                console.log(e.target.className)
+
                                 var code = e.target.id;
                                 if (code == '') code = e.target.parentNode.id;
-                                var params = `xsrf_token=${xsrf}&do=entry_insert&code=${code}`;
+
+                                var attributes = e.target.className;
+                                if (attributes == 'entry_delete' && 'entry_insert') {
+                                    attributes = e.target.className;
+                                } else if(attributes == 'giveaway__links') {
+                                    attributes = e.target.parentNode.className;
+                                }
+                                
+                                var params = `xsrf_token=${xsrf}&do=${attributes}&code=${code}`;
                                 console.log(params);
                                 main.ajax("https://www.steamgifts.com/ajax.php", "POST", params, function (r) {
+                                    r = JSON.parse(r);
                                     console.log(r);
+                                    if (r.type == "success") {
+                                        //if(r.points >= main.navPoints())
+                                        main.getBalance(r.points)
+                                    } else if (r.type == "error") {
+                                        console.log(r.msg);
+                                    }
                                 });
                             }
                         });
@@ -142,9 +163,35 @@
                     }
                 }
             },
+            giveawayStatus: function () {
+                var giveaway = main.find(document.getElementsByTagName("div"), {
+                    className: "giveaway__row-inner-wrap"
+                });
+                var Status = new Array();
+                if (giveaway) {
+                    for (var i = 0; i < giveaway.length; i++) {
+                        Status.push(giveaway[i].className == "giveaway__row-inner-wrap is-faded" ? "entry_delete" : "entry_insert");
+                    }
+                }
+                return Status;
+            },
+            getPrices: function () {
+                var titles = main.find(document.getElementsByTagName("span"), {
+                    className: "giveaway__heading__thin"
+                });
+                var Prices = new Array();
+                if (titles) {
+                    for (var i = 0; i < titles.length; i++) {
+                        var checkPrice = /\(([0-9]+)([P)])\)/i.test(titles[i].textContent);
+                        if (checkPrice) {
+                            Prices.push(titles[i].textContent.replace(/\D+/g, ""));
+                        }
+                    }
+                }
+                return Prices;
+            },
             start: function () {
                 main.fixHeader();
-                main.navPoints();
                 main.entryButtons();
             }
         };
