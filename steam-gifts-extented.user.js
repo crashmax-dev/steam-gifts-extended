@@ -116,9 +116,10 @@
                     className: "giveaway__heading__name"
                 });
                 var Urls = new Array();
+                var Prices = main.getPrices();
                 if (links) {
                     for (var i = 0; i < links.length; i++) {
-                        Urls.push([links[i].href.replace(/\/\s*$/, '').split('/')[4], giveaway[i].className == "giveaway__row-inner-wrap is-faded" ? "entry_delete" : "entry_insert"]);
+                        Urls.push([links[i].href.replace(/\/\s*$/, '').split('/')[4], giveaway[i].className == "giveaway__row-inner-wrap is-faded" ? "entry_delete" : "entry_insert", Prices[i]]);
                     }
                 }
                 return Urls;
@@ -150,23 +151,24 @@
                 }
                 return Prices;
             },
-            entryButtons: function () {
+            giveawayButtons: function () {
                 var xsrf = main.xsrf();
-                var Prices = main.getPrices();
                 var Giveaway = main.getUrls();
                 var target = main.find(document.getElementsByTagName("div"), {
                     className: "giveaway__links"
                 });
-                if (target) {
-                    for (var i = 0; i < target.length; i++) {
+                for (i in Giveaway) {
+                    if (Giveaway.hasOwnProperty(i)) {
                         var button = main.ce("div", {
                             style: "cursor: pointer",
-                            id: Giveaway[i][0],
+                            id: i,
                             html: (Giveaway[i][1] == "entry_delete" ? '<i class="fa fa-minus-circle"></i> <span>Remove Entry</span>' : '<i class="fa fa-plus-circle"></i> <span>Entry Giveaway</span>'),
                             onclick: function (e) {
+                                // ебаное костылище!
                                 var code = e.target.id;
                                 if (code == '') code = e.target.parentNode.id;
-                                var params = `xsrf_token=${xsrf}&do=entry_insert&code=${code}`;
+
+                                var params = `xsrf_token=${xsrf}&do=${Giveaway[code][1]}&code=${Giveaway[code][0]}`;
                                 console.log(params);
                                 main.ajax("https://www.steamgifts.com/ajax.php", "POST", params, function (r) {
                                     r = JSON.parse(r);
@@ -179,13 +181,15 @@
                                 });
                             }
                         });
-                        target[i].append(button);
                     }
+                    target[i].append(button);
                 }
             },
             start: function () {
+                console.log(`Your balance: ${main.getBalance()}P`);
+                console.log(main.getUrls());
                 main.fixHeader();
-                main.entryButtons();
+                main.giveawayButtons();
             }
         };
         main.start();
