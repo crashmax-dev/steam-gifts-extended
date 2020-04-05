@@ -3,7 +3,7 @@
 // @namespace      https://github.com/crashmax-off/SteamGiftsExtented
 // @description    Extended Functionality SteamGifts.com
 // @author         Vitalij Ryndin
-// @icon           https://github.com/crashmax-off/SteamGiftsExtented/raw/master/assets/ico.png
+// @icon           https://github.com/crashmax-off/SteamGiftsExtented/raw/master/assets/icons/logo.png
 // @include        https://www.steamgifts.com/*
 // @match          https://www.steamgifts.com/*
 // @version        1.0.0

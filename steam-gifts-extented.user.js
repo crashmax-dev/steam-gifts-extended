@@ -3,7 +3,7 @@
 // @namespace      https://github.com/crashmax-off/SteamGiftsExtented
 // @description    Extended Functionality SteamGifts.com
 // @author         Vitalij Ryndin
-// @icon           https://github.com/crashmax-off/SteamGiftsExtented/raw/master/assets/ico.png
+// @icon           https://github.com/crashmax-off/SteamGiftsExtented/raw/master/assets/icons/logo.png
 // @include        https://www.steamgifts.com/*
 // @match          https://www.steamgifts.com/*
 // @version        1.0.0
@@ -11,17 +11,16 @@
 
 (function () {
     function SteamGifts() {
+        var config = {
+            'github': 'https://cdn.rawgit.com/crashmax-off/SteamGiftsExtented/master/'
+        }
         var main = {
-            ajax: function (url, method, data, callback, rstate) {
+            ajax: function (data, callback, rstate) {
                 rstate = (typeof rstate != "undefined" ? rstate : 4);
                 var xhr = new XMLHttpRequest();
-                xhr.open(method, url, true);
-                if (method == "POST") {
-                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    xhr.send(data);
-                } else {
-                    xhr.send();
-                }
+                xhr.open("POST", "/ajax.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send(data);
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == rstate) {
                         if (xhr.status == 200) {
@@ -93,9 +92,13 @@
                 var xsrf = main.find(document.getElementsByTagName("input"), {
                     name: "xsrf_token"
                 });
-                return xsrf[0].defaultValue;
+                return xsrf ? xsrf[0].defaultValue : console.warn("[SG+] XSRF Not Found!");
             },
-            fixHeader: function () {
+            path: function (e) {
+                var path = document.location.pathname.toString();
+                return e ? path.replace(/\/\s*$/, '').split('/')[e] : path.replace(/\/\s*$/, '').split('/');
+            },
+            stickyHeader: function () {
                 var style = main.ce("style", {
                     type: "text/css",
                     html: "header{height:auto;position:sticky;top:0;z-index:1}"
@@ -111,7 +114,7 @@
                 }
                 return points[0].textContent;
             },
-            getUrls: function () {
+            getGiweawayUrls: function () {
                 var giveaway = main.find(document.getElementsByTagName("div"), {
                     className: "giveaway__row-inner-wrap"
                 });
@@ -119,7 +122,7 @@
                     className: "giveaway__heading__name"
                 });
                 var Urls = new Array();
-                var Prices = main.getPrices();
+                var Prices = main.getGiveawayPoints();
                 if (links) {
                     for (var i = 0; i < links.length; i++) {
                         Urls.push([links[i].href.replace(/\/\s*$/, '').split('/')[4], giveaway[i].className == "giveaway__row-inner-wrap is-faded" ? "entry_delete" : "entry_insert", Prices[i]]);
@@ -127,7 +130,7 @@
                 }
                 return Urls;
             },
-            giveawayStatus: function (css) {
+            getGiveawayStatus: function (css) {
                 var giveaway = main.find(document.getElementsByTagName("div"), {
                     className: "giveaway__row-inner-wrap"
                 });
@@ -143,7 +146,7 @@
                 }
                 return Status;
             },
-            getPrices: function () {
+            getGiveawayPoints: function () {
                 var titles = main.find(document.getElementsByTagName("span"), {
                     className: "giveaway__heading__thin"
                 });
@@ -158,9 +161,9 @@
                 }
                 return Prices;
             },
-            giveawayButtons: function () {
+            setGiveawayButtons: function () {
                 var xsrf = main.xsrf();
-                var Giveaway = main.getUrls();
+                var Giveaway = main.getGiweawayUrls();
                 var target = main.find(document.getElementsByTagName("div"), {
                     className: "giveaway__links"
                 });
@@ -177,7 +180,7 @@
                                 if (row.classList != 'giveaway__row-outer-wrap') row = e.target.parentNode.parentNode.parentNode.parentNode;
                                 var params = `xsrf_token=${xsrf}&do=${Giveaway[code][1]}&code=${Giveaway[code][0]}`;
                                 main.gebi(code).innerHTML = '<i class="fa fa-refresh fa-spin"></i> <span>Please wait...</span>';
-                                main.ajax("https://www.steamgifts.com/ajax.php", "POST", params, function (r) {
+                                main.ajax(params, function (r) {
                                     r = JSON.parse(r);
                                     if (r.type == "success") {
                                         main.getBalance(r.points)
@@ -191,7 +194,7 @@
                                             row.classList.remove("is-faded");
                                         }
                                     } else if (r.type == "error") {
-                                        main.gebi(code).innerHTML = `<i class="fa fa-exclamation-circle"></i> <span>${r.msg}</span>`;
+                                        main.gebi(code).innerHTML = `<i class="fa fa-exclamation-circle" style="text-shadow: 1px 1px 1px rgba(255,255,255,0.3);color:#a95570"></i> <span style="color:#a95570">${r.msg}</span>`;
                                     }
                                 });
                             }
@@ -200,9 +203,32 @@
                     target[i].append(button);
                 }
             },
+            steamDB: function () {
+                if (main.path(1) == 'user') {
+                    var target = main.find(document.getElementsByTagName("div"), {
+                        className: "sidebar__shortcut-inner-wrap"
+                    });
+                    var profile = main.find(document.links, {
+                        href: "https://steamcommunity.com/profiles/"
+                    });
+                    var getID = profile[0].href.replace(/\/\s*$/, '').split('/')[4];
+                    if (getID) {
+                        var button = main.ce("a", {
+                            href: `https://steamdb.info/calculator/${getID}/`,
+                            attr: {
+                                "data-tooltip": "Visit SteamDB Calculator",
+                                target: "_blank"
+                            },
+                            html: `<i class="fa"><img src="${config['github'] + 'assets/icons/steamdb.svg'}"><i>`
+                        });
+                        target[0].append(button);
+                    }
+                }
+            },
             start: function () {
-                main.fixHeader();
-                main.giveawayButtons();
+                main.steamDB();
+                main.stickyHeader();
+                main.setGiveawayButtons();
             }
         };
         main.start();
