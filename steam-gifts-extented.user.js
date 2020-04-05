@@ -98,7 +98,7 @@
             fixHeader: function () {
                 var style = main.ce("style", {
                     type: "text/css",
-                    html: "header{position:fixed;width:-webkit-fill-available;z-index:1;margin-top:-29px}body{margin-top:29px}"
+                    html: "header{position:fixed;width:-moz-available;width:-webkit-fill-available;z-index:1;margin-top:-29px}body{margin-top:29px}"
                 });
                 document.getElementsByTagName('head')[0].appendChild(style);
             },
