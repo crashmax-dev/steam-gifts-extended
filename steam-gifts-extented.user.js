@@ -55,6 +55,9 @@
                 }
                 return newEl;
             },
+            gebi: function (e) {
+                return document.getElementById(e);
+            },
             css: function (elem, css) {
                 var tList = css.split(";");
                 for (var i in tList) {
@@ -124,14 +127,18 @@
                 }
                 return Urls;
             },
-            giveawayStatus: function () {
+            giveawayStatus: function (css) {
                 var giveaway = main.find(document.getElementsByTagName("div"), {
                     className: "giveaway__row-inner-wrap"
                 });
                 var Status = new Array();
-                if (giveaway) {
+                if (!css) {
                     for (var i = 0; i < giveaway.length; i++) {
                         Status.push(giveaway[i].className == "giveaway__row-inner-wrap is-faded" ? "entry_delete" : "entry_insert");
+                    }
+                } else {
+                    for (var i = 0; i < giveaway.length; i++) {
+                        Status.push(giveaway[i].className);
                     }
                 }
                 return Status;
@@ -164,19 +171,23 @@
                             id: i,
                             html: (Giveaway[i][1] == "entry_delete" ? '<i class="fa fa-minus-circle"></i> <span>Remove Entry</span>' : '<i class="fa fa-plus-circle"></i> <span>Entry Giveaway</span>'),
                             onclick: function (e) {
-                                // ебаное костылище!
                                 var code = e.target.id;
                                 if (code == '') code = e.target.parentNode.id;
-
                                 var params = `xsrf_token=${xsrf}&do=${Giveaway[code][1]}&code=${Giveaway[code][0]}`;
-                                console.log(params);
+                                main.gebi(code).innerHTML = '<i class="fa fa-refresh fa-spin"></i> <span>Please wait...</span>';
                                 main.ajax("https://www.steamgifts.com/ajax.php", "POST", params, function (r) {
                                     r = JSON.parse(r);
-                                    console.log(r);
                                     if (r.type == "success") {
                                         main.getBalance(r.points)
+                                        if (Giveaway[code][1] == "entry_insert") {
+                                            Giveaway[code].splice(1, 1, "entry_delete");
+                                            main.gebi(code).innerHTML = '<i class="fa fa-minus-circle"></i> <span>Remove Entry</span>';
+                                        } else {
+                                            Giveaway[code].splice(1, 1, "entry_insert");
+                                            main.gebi(code).innerHTML = '<i class="fa fa-plus-circle"></i> <span>Entry Giveaway</span>';
+                                        }
                                     } else if (r.type == "error") {
-                                        console.log(r.msg);
+                                        main.gebi(code).innerHTML = '<i class="fa fa-exclamation-circle"></i> <span>Not Enough Points</span>';
                                     }
                                 });
                             }
@@ -186,8 +197,6 @@
                 }
             },
             start: function () {
-                console.log(`Your balance: ${main.getBalance()}P`);
-                console.log(main.getUrls());
                 main.fixHeader();
                 main.giveawayButtons();
             }
