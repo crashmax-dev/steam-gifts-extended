@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name           SteamGiftsExtented
 // @namespace      https://github.com/crashmax-off/SteamGiftsExtented
-// @description    Description
+// @description    Extended Functionality SteamGifts.com
 // @author         Vitalij Ryndin
-// @icon           https://cdn.steamgifts.com/img/favicon.ico
+// @icon           https://github.com/crashmax-off/SteamGiftsExtented/raw/master/assets/ico.png
 // @include        https://www.steamgifts.com/*
 // @match          https://www.steamgifts.com/*
 // @version        1.0.0
@@ -173,6 +173,8 @@
                             onclick: function (e) {
                                 var code = e.target.id;
                                 if (code == '') code = e.target.parentNode.id;
+                                var row = e.target.parentNode.parentNode.parentNode;
+                                if (row.classList != 'giveaway__row-outer-wrap') row = e.target.parentNode.parentNode.parentNode.parentNode;
                                 var params = `xsrf_token=${xsrf}&do=${Giveaway[code][1]}&code=${Giveaway[code][0]}`;
                                 main.gebi(code).innerHTML = '<i class="fa fa-refresh fa-spin"></i> <span>Please wait...</span>';
                                 main.ajax("https://www.steamgifts.com/ajax.php", "POST", params, function (r) {
@@ -182,12 +184,14 @@
                                         if (Giveaway[code][1] == "entry_insert") {
                                             Giveaway[code].splice(1, 1, "entry_delete");
                                             main.gebi(code).innerHTML = '<i class="fa fa-minus-circle"></i> <span>Remove Entry</span>';
+                                            row.classList.add("is-faded");
                                         } else {
                                             Giveaway[code].splice(1, 1, "entry_insert");
                                             main.gebi(code).innerHTML = '<i class="fa fa-plus-circle"></i> <span>Entry Giveaway</span>';
+                                            row.classList.remove("is-faded");
                                         }
                                     } else if (r.type == "error") {
-                                        main.gebi(code).innerHTML = '<i class="fa fa-exclamation-circle"></i> <span>Not Enough Points</span>';
+                                        main.gebi(code).innerHTML = `<i class="fa fa-exclamation-circle"></i> <span>${r.msg}</span>`;
                                     }
                                 });
                             }

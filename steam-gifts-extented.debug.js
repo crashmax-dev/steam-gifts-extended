@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name           SteamGiftsExtented
 // @namespace      https://github.com/crashmax-off/SteamGiftsExtented
-// @description    Description
+// @description    Extended Functionality SteamGifts.com
 // @author         Vitalij Ryndin
-// @icon           https://cdn.steamgifts.com/img/favicon.ico
+// @icon           https://github.com/crashmax-off/SteamGiftsExtented/raw/master/assets/ico.png
 // @include        https://www.steamgifts.com/*
 // @match          https://www.steamgifts.com/*
 // @version        1.0.0
