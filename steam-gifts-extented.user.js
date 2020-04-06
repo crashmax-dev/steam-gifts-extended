@@ -183,40 +183,42 @@
                 var target = main.find(document.getElementsByTagName("div"), {
                     className: "giveaway__links"
                 });
-                for (i in Giveaway) {
-                    if (Giveaway.hasOwnProperty(i)) {
-                        var button = main.ce("div", {
-                            style: "cursor: pointer",
-                            id: i,
-                            html: (Giveaway[i][1] == "entry_delete" ? '<i class="fa fa-minus-circle"></i> <span>Remove Entry</span>' : '<i class="fa fa-plus-circle"></i> <span>Entry Giveaway</span>'),
-                            onclick: function (e) {
-                                var code = e.target.id;
-                                if (code == '') code = e.target.parentNode.id;
-                                var row = e.target.parentNode.parentNode.parentNode;
-                                if (row.classList != 'giveaway__row-outer-wrap') row = e.target.parentNode.parentNode.parentNode.parentNode;
-                                var params = `xsrf_token=${xsrf}&do=${Giveaway[code][1]}&code=${Giveaway[code][0]}`;
-                                main.gebi(code).innerHTML = '<i class="fa fa-refresh fa-spin"></i> <span>Please wait...</span>';
-                                main.ajax(params, function (r) {
-                                    r = JSON.parse(r);
-                                    if (r.type == "success") {
-                                        main.getBalance(r.points)
-                                        if (Giveaway[code][1] == "entry_insert") {
-                                            Giveaway[code].splice(1, 1, "entry_delete");
-                                            main.gebi(code).innerHTML = '<i class="fa fa-minus-circle"></i> <span>Remove Entry</span>';
-                                            row.classList.add("is-faded");
-                                        } else {
-                                            Giveaway[code].splice(1, 1, "entry_insert");
-                                            main.gebi(code).innerHTML = '<i class="fa fa-plus-circle"></i> <span>Entry Giveaway</span>';
-                                            row.classList.remove("is-faded");
+                if (main.path(0, 1) != 'user') {
+                    for (i in Giveaway) {
+                        if (Giveaway.hasOwnProperty(i)) {
+                            var button = main.ce("div", {
+                                style: "cursor: pointer",
+                                id: i,
+                                html: (Giveaway[i][1] == "entry_delete" ? '<i class="fa fa-minus-circle"></i> <span>Remove Entry</span>' : '<i class="fa fa-plus-circle"></i> <span>Entry Giveaway</span>'),
+                                onclick: function (e) {
+                                    var code = e.target.id;
+                                    if (code == '') code = e.target.parentNode.id;
+                                    var row = e.target.parentNode.parentNode.parentNode;
+                                    if (row.classList != 'giveaway__row-outer-wrap') row = e.target.parentNode.parentNode.parentNode.parentNode;
+                                    var params = `xsrf_token=${xsrf}&do=${Giveaway[code][1]}&code=${Giveaway[code][0]}`;
+                                    main.gebi(code).innerHTML = '<i class="fa fa-refresh fa-spin"></i> <span>Please wait...</span>';
+                                    main.ajax(params, function (r) {
+                                        r = JSON.parse(r);
+                                        if (r.type == "success") {
+                                            main.getBalance(r.points)
+                                            if (Giveaway[code][1] == "entry_insert") {
+                                                Giveaway[code].splice(1, 1, "entry_delete");
+                                                main.gebi(code).innerHTML = '<i class="fa fa-minus-circle"></i> <span>Remove Entry</span>';
+                                                row.classList.add("is-faded");
+                                            } else {
+                                                Giveaway[code].splice(1, 1, "entry_insert");
+                                                main.gebi(code).innerHTML = '<i class="fa fa-plus-circle"></i> <span>Entry Giveaway</span>';
+                                                row.classList.remove("is-faded");
+                                            }
+                                        } else if (r.type == "error") {
+                                            main.gebi(code).innerHTML = `<i class="fa fa-exclamation-circle" style="text-shadow: 1px 1px 1px rgba(255,255,255,0.3);color:#a95570"></i> <span style="color:#a95570">${r.msg}</span>`;
                                         }
-                                    } else if (r.type == "error") {
-                                        main.gebi(code).innerHTML = `<i class="fa fa-exclamation-circle" style="text-shadow: 1px 1px 1px rgba(255,255,255,0.3);color:#a95570"></i> <span style="color:#a95570">${r.msg}</span>`;
-                                    }
-                                });
-                            }
-                        });
+                                    });
+                                }
+                            });
+                        }
+                        target[i].append(button);
                     }
-                    target[i].append(button);
                 }
             },
             steamDB: function () {
