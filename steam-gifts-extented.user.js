@@ -102,11 +102,12 @@
                 return e ? path.replace(/\/\s*$/, '').split('/')[e] : path.replace(/\/\s*$/, '').split('/');
             },
             stickyHeader: function () {
-                var style = main.ce("style", {
+                var sticky = main.ce("link", {
+                    rel: "stylesheet",
                     type: "text/css",
-                    html: "header{height:auto;position:sticky;top:0;z-index:1}"
+                    href: `${config['github']}css/header.css`
                 });
-                document.getElementsByTagName('head')[0].appendChild(style);
+                document.getElementsByTagName('head')[0].appendChild(sticky);
             },
             appID: function () {
                 var steamUrl = main.find(document.links, {
@@ -223,7 +224,17 @@
                 var targetUrl = main.find(document.links, {
                     href: "https://store.steampowered.com/app/"
                 });
-                if (targetUrl) {
+                if (main.path(0, 1) == 'giveaway') {
+                    var btnInGiveaway = main.ce("a", {
+                        href: `https://steamdb.info/app/${App[1]}/`,
+                        attr: {
+                            target: "_blank",
+                            title: "Visit SteamDB Info"
+                        },
+                        html: `<i><img class="icon" src="${config['github'] + 'icons/steamdb-white.svg'}"></i>`
+                    })
+                    targetUrl[1].before(btnInGiveaway);
+                } else if (targetUrl) {
                     for (var i = 0; i < App.length; i++) {
                         var btnApps = main.ce("a", {
                             href: `https://steamdb.info/app/${App[i]}/`,
@@ -232,7 +243,7 @@
                                 target: "_blank",
                                 title: "Visit SteamDB Info"
                             },
-                            html: `<img class="icon" src="${config['github'] + 'icons/steamdb.svg'}">`
+                            html: `<img class="icon" src="${config['github'] + 'icons/steamdb-dark.svg'}">`
                         });
                         targetUrl[i].before(btnApps);
                     }
@@ -252,13 +263,13 @@
                                 "data-tooltip": "Visit SteamDB Calculator",
                                 target: "_blank"
                             },
-                            html: `<img class="icon" src="${config['github'] + 'icons/steamdb.svg'}">`
+                            html: `<img class="icon" src="${config['github'] + 'icons/steamdb-dark.svg'}">`
                         });
                         target[0].append(button);
                     }
                 }
             },
-            setStyles: function () {
+            mainStyles: function () {
                 var styles = main.ce("link", {
                     rel: "stylesheet",
                     type: "text/css",
@@ -267,9 +278,9 @@
                 document.getElementsByTagName('head')[0].appendChild(styles);
             },
             start: function () {
-                main.setStyles();
-                main.steamDB();
                 main.stickyHeader();
+                main.mainStyles();
+                main.steamDB();
                 main.setGiveawayButtons();
             }
         };
