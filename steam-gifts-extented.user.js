@@ -12,7 +12,7 @@
 (function () {
     function SteamGifts() {
         var config = {
-            'github': 'https://cdn.rawgit.com/crashmax-off/SteamGiftsExtented/master/'
+            'github': 'https://crashmax-off.github.io/SteamGiftsExtented/'
         }
         var main = {
             ajax: function (data, callback, rstate) {
@@ -94,8 +94,11 @@
                 });
                 return xsrf ? xsrf[0].defaultValue : console.warn("[SG+] XSRF Not Found!");
             },
-            path: function (e) {
+            path: function (str, e) {
                 var path = document.location.pathname.toString();
+                if (str) {
+                    path = str
+                }
                 return e ? path.replace(/\/\s*$/, '').split('/')[e] : path.replace(/\/\s*$/, '').split('/');
             },
             stickyHeader: function () {
@@ -104,6 +107,18 @@
                     html: "header{height:auto;position:sticky;top:0;z-index:1}"
                 });
                 document.getElementsByTagName('head')[0].appendChild(style);
+            },
+            appID: function () {
+                var steamUrl = main.find(document.links, {
+                    href: "https://store.steampowered.com/app/"
+                });
+                if (steamUrl) {
+                    var Apps = new Array();
+                    for (var i = 0; i < steamUrl.length; i++) {
+                        Apps.push(main.path(steamUrl[i].href, 4));
+                    }
+                }
+                return Apps;
             },
             getBalance: function (value) {
                 var points = main.find(document.getElementsByTagName("span"), {
@@ -204,7 +219,25 @@
                 }
             },
             steamDB: function () {
-                if (main.path(1) == 'user') {
+                var App = main.appID();
+                var targetUrl = main.find(document.links, {
+                    href: "https://store.steampowered.com/app/"
+                });
+                if (targetUrl) {
+                    for (var i = 0; i < App.length; i++) {
+                        var btnApps = main.ce("a", {
+                            href: `https://steamdb.info/app/${App[i]}/`,
+                            attr: {
+                                class: "giveaway__icon",
+                                target: "_blank",
+                                title: "Visit SteamDB Info"
+                            },
+                            html: `<img class="icon" src="${config['github'] + 'icons/steamdb.svg'}">`
+                        });
+                        targetUrl[i].before(btnApps);
+                    }
+                }
+                if (main.path(0, 1) == 'user') {
                     var target = main.find(document.getElementsByTagName("div"), {
                         className: "sidebar__shortcut-inner-wrap"
                     });
@@ -219,13 +252,22 @@
                                 "data-tooltip": "Visit SteamDB Calculator",
                                 target: "_blank"
                             },
-                            html: `<i class="fa"><img src="${config['github'] + 'assets/icons/steamdb.svg'}"><i>`
+                            html: `<img class="icon" src="${config['github'] + 'icons/steamdb.svg'}">`
                         });
                         target[0].append(button);
                     }
                 }
             },
+            setStyles: function () {
+                var styles = main.ce("link", {
+                    rel: "stylesheet",
+                    type: "text/css",
+                    href: `${config['github']}css/main.css`
+                });
+                document.getElementsByTagName('head')[0].appendChild(styles);
+            },
             start: function () {
+                main.setStyles();
                 main.steamDB();
                 main.stickyHeader();
                 main.setGiveawayButtons();
