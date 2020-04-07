@@ -89,10 +89,8 @@
                 return list[0] ? list : null;
             },
             xsrf: function () {
-                var xsrf = main.find(document.getElementsByTagName("input"), {
-                    name: "xsrf_token"
-                });
-                return xsrf ? xsrf[0].defaultValue : console.warn("[SG+] XSRF Not Found!");
+                var logoutButton = document.getElementsByClassName("js__logout")[0];
+                return logoutButton.getAttribute("data-form").match(/xsrf_token=(.+)/)[1];
             },
             path: function (str, e) {
                 var path = document.location.pathname.toString();
@@ -105,7 +103,7 @@
                 var sticky = main.ce("link", {
                     rel: "stylesheet",
                     type: "text/css",
-                    href: `${config['github']}css/header.css`
+                    href: `${config.github}css/header.css`
                 });
                 document.getElementsByTagName('head')[0].appendChild(sticky);
             },
@@ -233,7 +231,7 @@
                             target: "_blank",
                             title: "Visit SteamDB Info"
                         },
-                        html: `<i><img class="icon" src="${config['github'] + 'icons/steamdb-white.svg'}"></i>`
+                        html: `<i><img class="icon" src="${config.github}icons/steamdb-white.svg"></i>`
                     })
                     targetUrl[1].before(btnInGiveaway);
                 } else if (targetUrl) {
@@ -245,7 +243,7 @@
                                 target: "_blank",
                                 title: "Visit SteamDB Info"
                             },
-                            html: `<img class="icon" src="${config['github'] + 'icons/steamdb-dark.svg'}">`
+                            html: `<img class="icon" src="${config.github}icons/steamdb-dark.svg">`
                         });
                         targetUrl[i].before(btnApps);
                     }
@@ -265,7 +263,7 @@
                                 "data-tooltip": "Visit SteamDB Calculator",
                                 target: "_blank"
                             },
-                            html: `<img class="icon" src="${config['github'] + 'icons/steamdb-dark.svg'}">`
+                            html: `<img class="icon" src="${config.github}icons/steamdb-dark.svg">`
                         });
                         target[0].append(button);
                     }
@@ -274,7 +272,6 @@
             popupMenu: function () {
                 var popup = main.ce("div", {
                     class: "popup popup-settings",
-                    style: "display:none",
                     html: "Example"
                 });
                 var popupActions = main.ce("p", {
@@ -301,7 +298,7 @@
                 var styles = main.ce("link", {
                     rel: "stylesheet",
                     type: "text/css",
-                    href: `${config['github']}css/main.css`
+                    href: `${config.github}css/main.css`
                 });
                 document.getElementsByTagName('head')[0].appendChild(styles);
             },
