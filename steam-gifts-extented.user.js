@@ -271,6 +271,32 @@
                     }
                 }
             },
+            popupMenu: function () {
+                var popup = main.ce("div", {
+                    class: "popup popup-settings",
+                    style: "display:none",
+                    html: "Example"
+                });
+                var popupActions = main.ce("p", {
+                    class: "popup__actions",
+                    html: '<span class="b-close">Close</span>'
+                });
+                popup.appendChild(popupActions);
+                document.getElementsByTagName('body')[0].appendChild(popup);
+            },
+            settingsMenu: function () {
+                var target = main.find(document.links, {
+                    href: "/account/settings/profile"
+                });
+                var btnSettings = main.ce("div", {
+                    class: "nav__row is-clickable trigger-popup",
+                    attr: {
+                        "data-popup": "popup-settings"
+                    },
+                    html: '<i class="icon-red fa fa-fw fa-cogs"></i><div class="nav__row__summary"><p class="nav__row__summary__name">Extented</p><p class="nav__row__summary__description">Click to open settings menu</p></div>'
+                });
+                target[0].before(btnSettings);
+            },
             mainStyles: function () {
                 var styles = main.ce("link", {
                     rel: "stylesheet",
@@ -280,6 +306,8 @@
                 document.getElementsByTagName('head')[0].appendChild(styles);
             },
             start: function () {
+                main.settingsMenu();
+                main.popupMenu();
                 main.stickyHeader();
                 main.mainStyles();
                 main.steamDB();
