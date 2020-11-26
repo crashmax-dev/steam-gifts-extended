@@ -152,7 +152,7 @@ exports.trim = trim;
 Object.defineProperty(exports, "__esModule", { value: true });
 const SteamGifts_1 = __webpack_require__(3);
 (() => {
-    const app = new SteamGifts_1.SteamGifts;
+    const app = new SteamGifts_1.SteamGifts();
     app.steamDB();
     app.stickyHeader();
     app.setGiveawayButtons();
@@ -211,12 +211,13 @@ class SteamGifts {
         const prices = this.getGiveawayPoints();
         if (links) {
             for (let [key, link] of links.entries()) {
+                let id = link.href.replace(/\/\s*$/, '').split('/')[4];
+                let status = giveaway[key].classList.contains('is-faded') ? 'entry_delete' : 'entry_insert';
+                let price = prices[key];
                 urls.push([
-                    link.href.replace(/\/\s*$/, '').split('/')[4],
-                    giveaway[key].classList.contains('is-faded') ?
-                        'entry_delete' :
-                        'entry_insert',
-                    prices[key]
+                    id,
+                    status,
+                    price
                 ]);
             }
         }
