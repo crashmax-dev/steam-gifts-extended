@@ -20,7 +20,7 @@ export class SteamGifts {
         return logout.getAttribute('data-form')?.match(/xsrf_token=(.+)/)![1]
     }
 
-    stickyHeader() {
+    stickyHeader(): void {
         const header = qs('header')
 
         css(header, `
@@ -39,7 +39,7 @@ export class SteamGifts {
         return points.textContent
     }
 
-    getGiveawayPoints() {
+    getGiveawayPoints(): string[] {
         const titles = qsa('span.giveaway__heading__thin')
         const prices = []
 
@@ -59,7 +59,7 @@ export class SteamGifts {
         return prices
     }
 
-    getGiweawayUrls() {
+    getGiweawayUrls(): string[][] {
         const giveaway = qsa('div.giveaway__row-inner-wrap')
         const links = qsa('a.giveaway__heading__name')
 
@@ -70,13 +70,15 @@ export class SteamGifts {
 
             for (let [key, link] of links.entries()) {
 
+                let id = (link as HTMLLinkElement).href.replace(/\/\s*$/, '').split('/')[4]
+                let status = giveaway[key].classList.contains('is-faded') ? 'entry_delete' : 'entry_insert'
+                let price = prices[key]
+
                 urls.push(
                     [
-                        (link as HTMLLinkElement).href.replace(/\/\s*$/, '').split('/')[4],
-                        giveaway[key].classList.contains('is-faded') ?
-                            'entry_delete' :
-                            'entry_insert',
-                        prices[key]
+                        id,
+                        status,
+                        price
                     ]
                 )
             }
@@ -116,7 +118,7 @@ export class SteamGifts {
         return apps
     }
 
-    steamDB() {
+    steamDB(): void {
         const apps = this.getAppID()
         const targetUrls = qsa('a[href^="https://store.steampowered.com/app/"')
 
@@ -172,7 +174,7 @@ export class SteamGifts {
         }
     }
 
-    setGiveawayButtons() {
+    setGiveawayButtons(): void {
         const xsrf = this.xsrfToken()
         const giveaways = this.getGiweawayUrls()
         const target = qsa('div.giveaway__links')

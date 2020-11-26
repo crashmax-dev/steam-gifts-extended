@@ -4,7 +4,7 @@ const DEV: boolean = process.env.NODE_ENV === 'development' ? true : false
 const HTTP: string = document.location.protocol
 const GITHUB: string = pkg.homepage
 const HOSTNAME: string = document.location.hostname
-const ENV_PATH = DEV ? 'https://localhost:8080' : GITHUB
+const ENV_PATH: string = DEV ? 'https://localhost:8080' : GITHUB
 const STEAMGIFTS: string = `${HTTP}//${HOSTNAME}`
 const PKG_VERSION: string = pkg.version
 
