@@ -1,1 +1,0 @@
-export const gebi = (e: string) => (document.getElementById(e) as Element)

@@ -1,16 +1,12 @@
 {
-    "compilerOptions": {
-        "esModuleInterop": true,
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "strict": true,
-        "target": "es2019"
-    },
-    "include": [
-        "src/*"
+  "extends": "@crashmax/tsconfig",
+  "compilerOptions": {
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
     ],
-    "exclude": [
-        "node_modules/"
-    ]
+    "outDir": "dist"
+  },
+  "include": ["src/**/*"]
 }

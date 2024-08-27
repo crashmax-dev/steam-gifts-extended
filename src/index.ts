@@ -1,9 +1,11 @@
-import { SteamGifts } from './components/SteamGifts'
+import { giveawayButtons } from './features/giveaway-buttons'
+import { giveawayEnters } from './features/giveaway-enters'
+import { steamDatabaseLinks } from './features/steamdb-links'
+import { stickyHeader } from './features/sticky-header'
+import styles from './index.scss?raw'
 
-(() => {
-    const app = new SteamGifts()
-
-    app.steamDB()
-    app.stickyHeader()
-    app.setGiveawayButtons()
-})()
+GM_addStyle(styles)
+stickyHeader()
+steamDatabaseLinks()
+giveawayButtons()
+giveawayEnters()
