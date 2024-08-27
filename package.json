@@ -2,7 +2,7 @@
   "name": "steam-gifts-extended",
   "description": "🎮 Userscript extend steamgifts.com",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "module",
   "homepage": "https://crashmax-dev.github.io/steam-gifts-extended/",
   "license": "MIT",
@@ -18,9 +18,7 @@
     "format": "prettier --write \"**/*.{js,ts,tsx,json}\""
   },
   "dependencies": {
-    "@zero-dependency/dom": "1.8.4",
-    "@zero-dependency/fetcher": "1.2.5",
-    "@zero-dependency/utils": "1.7.7"
+    "@zero-dependency/dom": "1.8.4"
   },
   "devDependencies": {
     "@crashmax/prettier-config": "5.0.2",

@@ -15,13 +15,14 @@ export function giveawayEnters() {
     'a',
     {
       href: '#',
-      onclick: (event) => {
+      onclick: async (event) => {
         event.preventDefault()
         const entryButtons = document.querySelectorAll<HTMLButtonElement>(
           '#entry_insert-giveaway'
         )
         for (const button of entryButtons) {
           button.click()
+          await new Promise((resolve) => setTimeout(resolve, 1000))
         }
       }
     },

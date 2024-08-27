@@ -11,12 +11,6 @@ importers:
       '@zero-dependency/dom':
         specifier: 1.8.4
         version: 1.8.4
-      '@zero-dependency/fetcher':
-        specifier: 1.2.5
-        version: 1.2.5
-      '@zero-dependency/utils':
-        specifier: 1.7.7
-        version: 1.7.7
     devDependencies:
       '@crashmax/prettier-config':
         specifier: 5.0.2
@@ -378,12 +372,6 @@ packages:
 
   '@zero-dependency/dom@1.8.4':
     resolution: {integrity: sha512-k+u4ypnqz30ENCSW1KKLsIttF/GTHf/ZkPwHMZejXs5pYHXyj21qCazkFY0ohwKG6Rq/1uXz7PcwCfoUuxZ9DA==}
-
-  '@zero-dependency/fetcher@1.2.5':
-    resolution: {integrity: sha512-0KWV+DJCnHK+W9w4Hj3RnZUeQ7bLLFGPRBQX2kyvMjMxR+FaYZlmPW0k87KR1xknEN/3+oBovkQTxY32sqK/sg==}
-
-  '@zero-dependency/utils@1.7.7':
-    resolution: {integrity: sha512-yVHb1gljLa3rUlo9Fp2Cj5H6EfFrr/vngObdthDskzobyVoFhTknVDh6rnQMXiWhLqZz5V1lbROWit5Kc60s8g==}
 
   ansi-styles@3.2.1:
     resolution: {integrity: sha512-VT0ZI6kZRdTh8YyJw3SMbYm/u+NqfsAxEpWO0Pf9sq8/e94WxxOpPKx9FR1FlyCtOVDNOQ+8ntlqFxiRc+r5qA==}
@@ -1214,10 +1202,6 @@ snapshots:
   '@zero-dependency/dom@1.8.4':
     dependencies:
       csstype: 3.1.2
-
-  '@zero-dependency/fetcher@1.2.5': {}
-
-  '@zero-dependency/utils@1.7.7': {}
 
   ansi-styles@3.2.1:
     dependencies:
