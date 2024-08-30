@@ -18,7 +18,8 @@
     "format": "prettier --write \"**/*.{js,ts,tsx,json}\""
   },
   "dependencies": {
-    "@zero-dependency/dom": "1.8.4"
+    "@zero-dependency/dom": "1.8.4",
+    "@zero-dependency/utils": "1.7.7"
   },
   "devDependencies": {
     "@crashmax/prettier-config": "5.0.2",
