@@ -1,4 +1,6 @@
-# Greasify Template
+# steam-gifts-extended
+
+> https://crashmax-dev.github.io/steam-gifts-extended/steam-gifts-extended.user.js
 
 ## Usage
 
